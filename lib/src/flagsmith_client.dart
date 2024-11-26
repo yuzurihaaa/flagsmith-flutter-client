@@ -307,6 +307,23 @@ class FlagsmithClient {
     return flag?.enabled ?? false;
   }
 
+  /// Check if Feature flag exist from cache and is enabled
+  ///
+  /// [featureName] an identifier for the feature
+  /// [user] an identifier for the user
+  /// [reload] force reload from API
+  /// Returns true if feature flag exist and enabled, null otherwise
+  bool isCachedFeatureFlagEnabled(String featureName,
+      {Identity? user, bool? reload}) {
+    if (!config.caches) {
+      log('Exception: caches are NOT enabled!');
+      throw FlagsmithConfigException(Exception('caches are NOT enabled!'));
+    }
+    var feature = cachedFlags
+        .firstWhereOrNull((element) => element.feature.name == featureName);
+    return feature?.enabled == true;
+  }
+
   /// Get feature flag value by [featureId] and optionally for a [user]
   ///
   /// [reload] force reload from API

@@ -22,6 +22,12 @@ void main() {
       expect(() => fs.getCachedFeatureFlagValue(notImplementedFeatureName),
           throwsA(isA<FlagsmithConfigException>()));
     });
+
+    test('When caches not enabled and get cached flag enabled then fail',
+        () async {
+      expect(() => fs.isCachedFeatureFlagEnabled(notImplementedFeatureName),
+          throwsA(isA<FlagsmithConfigException>()));
+    });
   });
 
   group('[Caches] enabled', () {
@@ -65,6 +71,11 @@ void main() {
     test('When cache is not empty', () async {
       await fs.getFeatureFlags();
       expect(fs.cachedFlags, isNotEmpty);
+    });
+
+    test('When cached flag has value and enabled', () async {
+      final flagValue = fs.isCachedFeatureFlagEnabled('my_feature');
+      expect(flagValue, true);
     });
   });
 }
